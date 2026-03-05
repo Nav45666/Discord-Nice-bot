@@ -336,7 +336,6 @@ Discord-Nice-bot
 <h2>Author</h2>
 
 <p>
-<b>Nav</b><br>
-Electronics Engineering Student<br>
+<b>Abhinav</b><br>
 Python • Embedded Systems • Software Development
 </p>
