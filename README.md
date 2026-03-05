@@ -1,45 +1,36 @@
-<h1 align="center">Discord Nice Bot</h1>
+<h1 align="center">Discord Utility Bot</h1>
 
 <p align="center">
-A lightweight Discord bot written in <b>Python</b> that automatically replies <b>"Nice."</b> when trigger phrases such as <code>69</code> appear in chat.
+A multifunctional Discord bot built using <b>Python</b> and <b>discord.py</b>.  
+The bot provides interactive commands including games, quizzes, polls, direct messaging utilities, and YouTube search functionality.
 </p>
 
 <hr>
 
-<h2>Features</h2>
-
-<ul>
-<li>Detects trigger phrases like <code>69</code>, <code>sixty nine</code>, etc.</li>
-<li>Sends randomized "Nice" responses</li>
-<li>Ignores configured channels</li>
-<li>Lightweight and easy to deploy</li>
-<li>Built using the <b>discord.py</b> library</li>
-</ul>
-
-<hr>
-
-<h2>How It Works</h2>
+<h2>Overview</h2>
 
 <p>
-The bot listens to messages sent in a Discord server.  
-Whenever a message contains a configured trigger phrase, the bot replies with a randomized response from its response list.
+This project is a Python-based Discord bot designed to demonstrate event-driven programming using the 
+<code>discord.py</code> library. The bot includes multiple interactive commands such as games, quizzes,
+utility tools, and automated responses for server interaction.
 </p>
 
-<p><b>Example</b></p>
-
-<pre>
-User: That number is 69
-Bot: Nice.
-</pre>
+<p>
+The project also integrates external libraries including <code>yt_dlp</code> for YouTube search functionality
+and <code>dotenv</code> for secure environment variable management.
+</p>
 
 <hr>
 
-<h2>Tech Stack</h2>
+<h2>Technologies Used</h2>
 
 <ul>
 <li>Python</li>
 <li>discord.py</li>
-<li>Event-driven message handling</li>
+<li>yt_dlp</li>
+<li>python-dotenv</li>
+<li>Asyncio</li>
+<li>Logging</li>
 </ul>
 
 <hr>
@@ -53,18 +44,18 @@ git clone https://github.com/Nav45666/Discord-Nice-bot.git
 cd Discord-Nice-bot
 </pre>
 
-<h3>2. Install Dependencies</h3>
+<h3>2. Install Required Dependencies</h3>
 
 <pre>
-pip install discord.py
+pip install discord.py python-dotenv yt_dlp
 </pre>
 
-<h3>3. Add Your Bot Token</h3>
+<h3>3. Configure Environment Variables</h3>
 
-<p>Insert your Discord bot token into the configuration file:</p>
+Create a <code>.env</code> file and add your Discord bot token.
 
 <pre>
-TOKEN = "your_discord_bot_token"
+DISCORD_TOKEN=your_bot_token_here
 </pre>
 
 <h3>4. Run the Bot</h3>
@@ -75,28 +66,7 @@ python bot.py
 
 <hr>
 
-<h2>Configuration</h2>
-
-<p>You can customize triggers, responses, and ignored channels.</p>
-
-<pre>
-ignored_channels = []
-
-triggers = [
-"69",
-"sixty nine",
-"sixty-nine"
-]
-
-responses = [
-"Nice.",
-"Naisu."
-]
-</pre>
-
-<hr>
-
-<h2>Bot Functions</h2>
+<h2>Bot Events</h2>
 
 <h3>on_ready()</h3>
 
@@ -104,80 +74,237 @@ responses = [
 Triggered when the bot successfully connects to Discord.
 </p>
 
-<b>Purpose</b>
-
 <ul>
-<li>Confirms the bot is online</li>
-<li>Prints login information to the console</li>
+<li>Confirms the bot has started</li>
+<li>Displays the bot name in the console</li>
 </ul>
 
 <pre>
-Bot connected as NiceBot#1234
+We are ready to go in, BotName
 </pre>
 
-<hr>
+<h3>on_member_join(member)</h3>
+
+<p>
+Executed when a new user joins the server.
+</p>
+
+<ul>
+<li>Sends a welcome direct message to the new member</li>
+</ul>
 
 <h3>on_message(message)</h3>
 
 <p>
-Event listener that runs whenever a message is sent in the server.
+Handles incoming messages and ensures commands are processed properly.
 </p>
 
-<b>Responsibilities</b>
-
 <ul>
-<li>Reads incoming messages</li>
-<li>Checks if the message contains a trigger phrase</li>
 <li>Ignores messages from the bot itself</li>
-<li>Ensures the channel is not ignored</li>
-<li>Sends a response when a trigger is detected</li>
+<li>Passes messages to the command handler</li>
 </ul>
 
 <hr>
 
-<h3>contains_trigger(message_content)</h3>
+<h2>Commands</h2>
+
+<h3>!hello</h3>
 
 <p>
-Helper function that checks if a message contains any trigger phrase.
+Greets the user who invoked the command.
 </p>
 
-<b>Input</b>
-
 <pre>
-message_content (string)
+!hello
 </pre>
 
-<b>Output</b>
+Example response:
 
 <pre>
-True or False
+Hello @username!
 </pre>
 
 <hr>
 
-<h3>get_random_response()</h3>
+<h3>!dm</h3>
 
 <p>
-Returns a random response from the predefined list.
+Sends a direct message to the user containing their input message.
 </p>
 
 <pre>
-Nice.
-Naisu.
+!dm Hello there
+</pre>
+
+Response:
+
+<pre>
+You said Hello there
 </pre>
 
 <hr>
 
-<h3>is_ignored_channel(channel_id)</h3>
+<h3>!reply</h3>
 
 <p>
-Checks if the current channel is listed in the ignored channels.
+Replies directly to the user's message in the channel.
 </p>
 
 <pre>
-True  → Bot will not respond
-False → Bot will respond normally
+!reply
 </pre>
+
+<hr>
+
+<h3>!poll</h3>
+
+<p>
+Creates a simple reaction-based poll in the channel.
+</p>
+
+<pre>
+!poll Do you like this bot?
+</pre>
+
+Features:
+
+<ul>
+<li>Creates an embedded poll message</li>
+<li>Adds 👍 and 👎 reaction options</li>
+</ul>
+
+<hr>
+
+<h3>!flip (aliases: coin, coinflip)</h3>
+
+<p>
+Simulates a coin flip game. Users can optionally guess the outcome.
+</p>
+
+<pre>
+!flip
+!flip heads
+!flip tails
+</pre>
+
+Possible outcomes:
+
+<ul>
+<li>Coin result displayed</li>
+<li>Win / Lose message if guessing</li>
+</ul>
+
+<hr>
+
+<h3>!rps (aliases: rockpaperscissors)</h3>
+
+<p>
+Play Rock-Paper-Scissors against the bot.
+</p>
+
+<pre>
+!rps rock
+!rps paper
+!rps scissors
+</pre>
+
+Features:
+
+<ul>
+<li>Random bot choice</li>
+<li>Win/Lose/Tie result calculation</li>
+</ul>
+
+<hr>
+
+<h3>!medquiz</h3>
+
+<p>
+Launches an interactive medical multiple-choice quiz.
+</p>
+
+Features:
+
+<ul>
+<li>User selects number of questions</li>
+<li>Randomized question selection</li>
+<li>Score tracking</li>
+<li>Explanation display after incorrect answers</li>
+<li>Timeout protection</li>
+</ul>
+
+Example:
+
+<pre>
+!medquiz
+</pre>
+
+<hr>
+
+<h3>!quiz</h3>
+
+<p>
+General knowledge quiz with multiple-choice questions.
+</p>
+
+Features:
+
+<ul>
+<li>Randomized questions</li>
+<li>Interactive answer system</li>
+<li>Score calculation</li>
+<li>Timed responses</li>
+</ul>
+
+Example:
+
+<pre>
+!quiz
+</pre>
+
+<hr>
+
+<h3>!yt (aliases: youtube, search)</h3>
+
+<p>
+Searches YouTube and returns the top video results.
+</p>
+
+Example:
+
+<pre>
+!yt python tutorial
+</pre>
+
+Output example:
+
+<pre>
+1. Video Title
+2. Video Title
+3. Video Title
+</pre>
+
+Features:
+
+<ul>
+<li>Uses yt_dlp for searching</li>
+<li>Returns top 3 YouTube results</li>
+<li>Provides clickable video links</li>
+</ul>
+
+<hr>
+
+<h2>Logging</h2>
+
+<p>
+All bot activity and debugging information are logged to:
+</p>
+
+<pre>
+discord.log
+</pre>
+
+This assists with debugging and monitoring bot behavior.
 
 <hr>
 
@@ -187,7 +314,8 @@ False → Bot will respond normally
 Discord-Nice-bot
 │
 ├── bot.py
-├── config.py
+├── .env
+├── discord.log
 └── README.md
 </pre>
 
@@ -196,10 +324,11 @@ Discord-Nice-bot
 <h2>Future Improvements</h2>
 
 <ul>
-<li>Add slash commands</li>
-<li>External configuration file</li>
-<li>Command to dynamically add triggers</li>
-<li>Cooldown system to prevent spam</li>
+<li>Slash command support</li>
+<li>Music playback functionality</li>
+<li>Database-backed quiz system</li>
+<li>Advanced moderation commands</li>
+<li>Improved error handling</li>
 </ul>
 
 <hr>
@@ -209,5 +338,5 @@ Discord-Nice-bot
 <p>
 <b>Nav</b><br>
 Electronics Engineering Student<br>
-Interested in Python, Embedded Systems, and Web Development
+Python • Embedded Systems • Software Development
 </p>
